@@ -9,4 +9,3 @@ RUN apt-get update \
   && apt-get clean
 
 ENV HOME=/home/node
-RUN groupadd -r node && useradd -r -g node --create-home node
