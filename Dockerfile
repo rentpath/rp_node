@@ -1,4 +1,4 @@
-FROM node:5.8.0
+FROM node:8.9.1
 
 RUN apt-get update \
   && apt-get install -y apt-transport-https
