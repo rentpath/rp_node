@@ -34,7 +34,7 @@ jobs:
 
       - name: log inputs
         run: |
-          .github/workflows/scripts/log_input.sh \
+          .github/workflows/scripts/log.sh \
             "context:    ${{ github.event.inputs.context }}" \
             "draft:      ${{ github.event.inputs.draft }}" \
             "prerelease: ${{ github.event.inputs.prerelease }}"
@@ -104,7 +104,7 @@ jobs:
 
       - name: log variables
         run: |
-          .github/workflows/scripts/log_input.sh \
+          .github/workflows/scripts/log.sh \
             "owner:        ${{ steps.vars.outputs.owner }}" \
             "repo:         ${{ steps.vars.outputs.repo }}" \
             "context:      ${{ steps.vars.outputs.context }}" \
