@@ -2,6 +2,10 @@ Docker base for node projects
 
 # UPDATING THE BASE IMAGE
 
+## Updating the Debian version
+
+Edit `.debian-version`.
+
 ## Updating the NodeJS version
 
 Edit `.node-version`.
