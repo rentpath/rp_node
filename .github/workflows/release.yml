@@ -34,7 +34,7 @@ jobs:
 
       - name: log inputs
         run: |
-          .github/workflows/scripts/log_input.sh \
+          .github/workflows/scripts/log.sh \
             "context:    ${{ github.event.inputs.context }}" \
             "draft:      ${{ github.event.inputs.draft }}" \
             "prerelease: ${{ github.event.inputs.prerelease }}"
@@ -104,7 +104,7 @@ jobs:
 
       - name: log variables
         run: |
-          .github/workflows/scripts/log_input.sh \
+          .github/workflows/scripts/log.sh \
             "owner:        ${{ steps.vars.outputs.owner }}" \
             "repo:         ${{ steps.vars.outputs.repo }}" \
             "context:      ${{ steps.vars.outputs.context }}" \
@@ -131,13 +131,14 @@ jobs:
       - name: build release image
         run: |
           docker build \
-            -t ${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.version }}
+            -t ${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.version }} \
             -t ${{ steps.vars.outputs.image }}:latest \
             --build-arg BUILDKIT_INLINE_CACHE \
             --build-arg NODE_VERSION="${{ steps.vars.outputs.node_version }}" \
             --build-arg YARN_VERSION="${{ steps.vars.outputs.yarn_version }}" \
             --cache-from $CACHE_FROM \
-            -f Dockerfile .
+            -f Dockerfile \
+            .
         env:
           BUILDKIT_INLINE_CACHE: 1
           CACHE_FROM: ${{ steps.vars.outputs.image }}:latest
