@@ -1,9 +1,15 @@
 Docker base for node projects
 
-## how to tag a new image
+# UPDATING THE BASE IMAGE
 
-- modify Dockerfile to taste
-- build image and tag (example below)
-  - `docker build . -t rentpath/rp_node:node-v14.15.4_yarn-v1.22.5`
-- push it
-  - `docker push rentpath/rp_node:node-v14.15.4_yarn-v1.22.5`
+## Updating the NodeJS version
+
+Edit `.node-version`.
+
+## Updating the Yarn version
+
+Edit `.yarn-version`.
+
+# RELEASING A NEW BASE IMAGE
+
+The `release` workflow should build, push, tag, and release the new image.
