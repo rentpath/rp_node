@@ -85,7 +85,7 @@ jobs:
             DEBIAN_VERSION=$( cat .debian-version )
           fi
           echo "DEBIAN_VERSION=${DEBIAN_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=node_version::${DEBIAN_VERSION}"
+          echo "::set-output name=debian_version::${DEBIAN_VERSION}"
 
           NODE_VERSION="16.14.0"
           if [[ -r .node-version ]]; then
@@ -112,16 +112,17 @@ jobs:
       - name: log variables
         run: |
           .github/workflows/scripts/log.sh \
-            "owner:        ${{ steps.vars.outputs.owner }}" \
-            "repo:         ${{ steps.vars.outputs.repo }}" \
-            "context:      ${{ steps.vars.outputs.context }}" \
-            "image:        ${{ steps.vars.outputs.image }}" \
-            "ref:          ${{ steps.vars.outputs.ref }}" \
-            "sha:          ${{ steps.vars.outputs.sha }}" \
-            "short_sha:    ${{ steps.vars.outputs.short_sha }}" \
-            "node_version: ${{ steps.vars.outputs.node_version }}" \
-            "yarn_version: ${{ steps.vars.outputs.yarn_version }}" \
-            "version:      ${{ steps.vars.outputs.version }}"
+            "owner:          ${{ steps.vars.outputs.owner }}" \
+            "repo:           ${{ steps.vars.outputs.repo }}" \
+            "context:        ${{ steps.vars.outputs.context }}" \
+            "image:          ${{ steps.vars.outputs.image }}" \
+            "ref:            ${{ steps.vars.outputs.ref }}" \
+            "sha:            ${{ steps.vars.outputs.sha }}" \
+            "short_sha:      ${{ steps.vars.outputs.short_sha }}" \
+            "debian_version: ${{ steps.vars.outputs.debian_version }}" \
+            "node_version:   ${{ steps.vars.outputs.node_version }}" \
+            "yarn_version:   ${{ steps.vars.outputs.yarn_version }}" \
+            "version:        ${{ steps.vars.outputs.version }}"
 
       - name: set context status to "Starting release…"
         uses: rentpath/update-status-action@v1
