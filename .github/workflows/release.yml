@@ -131,13 +131,14 @@ jobs:
       - name: build release image
         run: |
           docker build \
-            -t ${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.version }}
+            -t ${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.version }} \
             -t ${{ steps.vars.outputs.image }}:latest \
             --build-arg BUILDKIT_INLINE_CACHE \
             --build-arg NODE_VERSION="${{ steps.vars.outputs.node_version }}" \
             --build-arg YARN_VERSION="${{ steps.vars.outputs.yarn_version }}" \
             --cache-from $CACHE_FROM \
-            -f Dockerfile .
+            -f Dockerfile \
+            .
         env:
           BUILDKIT_INLINE_CACHE: 1
           CACHE_FROM: ${{ steps.vars.outputs.image }}:latest
