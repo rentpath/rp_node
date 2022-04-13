@@ -19,7 +19,15 @@ RUN groupadd --gid 1000 node \
     *) echo "unsupported architecture"; exit 1 ;; \
   esac \
   && set -ex \
-  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils --no-install-recommends \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    dirmngr \
+    gnupg \
+    wget \
+    xz-utils \
+    zlib1g=1:1.2.11.dfsg-2+deb11u1 \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSLO --compressed "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" \
   && tar -xJf "node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
