@@ -1,6 +1,8 @@
 FROM debian:buster-slim
 
-ENV NPM_CONFIG_LOGLEVEL=info NODE_VERSION=16.14.2 YARN_VERSION=1.22.17
+ARG NODE_VERSION
+ARG YARN_VERSION
+ENV NPM_CONFIG_LOGLEVEL=info
 
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node \
