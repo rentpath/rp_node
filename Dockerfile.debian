@@ -27,7 +27,7 @@ RUN groupadd --gid 1000 node \
     gnupg \
     wget \
     xz-utils \
-    zlib1g=1:1.2.11.dfsg-2+deb11u1 \
+  && ( apt-get install -y --no-install-recommends zlib1g=1:1.2.11.dfsg-2+deb11u1 || true ) \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSLO --compressed "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" \
   && tar -xJf "node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
