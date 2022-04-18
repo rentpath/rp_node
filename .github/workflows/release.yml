@@ -216,29 +216,40 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: git tag
+        id: release_exists
         shell: bash {0}
         run: |
           git config --global user.email "idg@rentpath.com"
           git config --global user.name "rentpath-plateng"
 
+          ALPINE_RELEASE_EXISTS=""
           if [[ -n "${{ steps.vars.outputs.alpine_full_version }}" ]]; then
             git tag --list "${{ steps.vars.outputs.alpine_full_version }}" | grep -q "${{ steps.vars.outputs.alpine_full_version }}"
             if [[ ! $? ]]; then
               git tag -a ${{ steps.vars.outputs.alpine_full_version }} -m "${{ steps.vars.outputs.alpine_full_version }}"
               git push origin refs/tags/${{ steps.vars.outputs.alpine_full_version }}:refs/tags/${{ steps.vars.outputs.alpine_full_version }}
+            else
+              ALPINE_RELEASE_EXISTS="true"
             fi
           fi
+          echo "ALPINE_RELEASE_EXISTS=${ALPINE_RELEASE_EXISTS}" >> $GITHUB_ENV
+          echo "::set-output name=alpine::${ALPINE_RELEASE_EXISTS}"
 
+          DEBIAN_RELEASE_EXISTS=""
           if [[ -z "${{ steps.vars.outputs.debian_full_version }}" ]]; then
             git tag --list "${{ steps.vars.outputs.debian_full_version }}" | grep -q "${{ steps.vars.outputs.debian_full_version }}"
             if [[ ! $? ]]; then
               git tag -a ${{ steps.vars.outputs.debian_full_version }} -m "${{ steps.vars.outputs.debian_full_version }}"
               git push origin refs/tags/${{ steps.vars.outputs.debian_full_version }}:refs/tags/${{ steps.vars.outputs.debian_full_version }}
+            else
+              DEBIAN_RELEASE_EXISTS="true"
             fi
           fi
+          echo "DEBIAN_RELEASE_EXISTS=${DEBIAN_RELEASE_EXISTS}" >> $GITHUB_ENV
+          echo "::set-output name=debian::${DEBIAN_RELEASE_EXISTS}"
 
       - name: release Alpine image
-        if: steps.vars.outputs.alpine_full_version != ''
+        if: steps.vars.outputs.alpine_full_version != '' && steps.release_exists.outputs.alpine == ''
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -250,7 +261,7 @@ jobs:
           prerelease: ${{ github.event.inputs.prerelease || false }}
 
       - name: release Debian image
-        if: steps.vars.outputs.debian_full_version != ''
+        if: steps.vars.outputs.debian_full_version != '' && steps.release_exists.outputs.debian = ''
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
