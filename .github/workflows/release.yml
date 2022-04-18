@@ -119,14 +119,18 @@ jobs:
           echo "::set-output name=debian_version::${DEBIAN_VERSION}"
 
           NODE_VERSION="16.14.0"
-          if [[ -r .node-version ]]; then
+          if [[ -n "${{ github.event.inputs.node_version }}" ]]; then
+            NODE_VERSION="${{ github.event.inputs.node_version }}"
+          elif [[ -r .node-version ]]; then
             NODE_VERSION=$( cat .node-version )
           fi
           echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
           echo "::set-output name=node_version::${NODE_VERSION}"
 
           YARN_VERSION="1.22.17"
-          if [[ -r .yarn-version ]]; then
+          if [[ -n "${{ github.event.inputs.yarn_version }}" ]]; then
+            YARN_VERSION="${{ github.event.inputs.yarn_version }}"
+          elif [[ -r .yarn-version ]]; then
             YARN_VERSION=$( cat .yarn-version )
           fi
           echo "YARN_VERSION=${YARN_VERSION}" >> $GITHUB_ENV
