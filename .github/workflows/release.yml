@@ -236,7 +236,7 @@ jobs:
           echo "::set-output name=alpine::${ALPINE_RELEASE_EXISTS}"
 
           DEBIAN_RELEASE_EXISTS=""
-          if [[ -z "${{ steps.vars.outputs.debian_full_version }}" ]]; then
+          if [[ -n "${{ steps.vars.outputs.debian_full_version }}" ]]; then
             git tag --list "${{ steps.vars.outputs.debian_full_version }}" | grep -q "${{ steps.vars.outputs.debian_full_version }}"
             if [[ ! $? ]]; then
               git tag -a ${{ steps.vars.outputs.debian_full_version }} -m "${{ steps.vars.outputs.debian_full_version }}"
