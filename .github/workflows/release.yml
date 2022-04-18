@@ -216,6 +216,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: git tag
+        shell: bash {0}
         run: |
           git config --global user.email "idg@rentpath.com"
           git config --global user.name "rentpath-plateng"
