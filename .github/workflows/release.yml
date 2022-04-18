@@ -261,7 +261,7 @@ jobs:
           prerelease: ${{ github.event.inputs.prerelease || false }}
 
       - name: release Debian image
-        if: steps.vars.outputs.debian_full_version != '' && steps.release_exists.outputs.debian = ''
+        if: steps.vars.outputs.debian_full_version != '' && steps.release_exists.outputs.debian == ''
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
