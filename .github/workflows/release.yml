@@ -66,35 +66,35 @@ jobs:
         id: vars
         run: |
           OWNER=$( echo ${{ github.repository }} | sed -E -e 's/\/.+$//' )
-          echo "OWNER=$OWNER" >> $GITHUB_ENV
-          echo "::set-output name=owner::${OWNER}"
+          echo "OWNER=${OWNER}" >> $GITHUB_ENV
+          echo "owner=${OWNER}" >> $GITHUB_OUTPUT
 
           REPO=$( echo ${{ github.repository }} | sed -E -e 's/^[^\/]+\///')
-          echo "REPO=$REPO" >> $GITHUB_ENV
-          echo "::set-output name=repo::${REPO}"
+          echo "REPO=${REPO}" >> $GITHUB_ENV
+          echo "repo=${REPO}" >> $GITHUB_OUTPUT
 
           CONTEXT="${{ github.event.inputs.context || 'release' }}"
           echo "CONTEXT=${CONTEXT}" >> $GITHUB_ENV
-          echo "::set-output name=context::${CONTEXT}"
+          echo "context=${CONTEXT}" >> $GITHUB_OUTPUT
 
           IMAGE="ghcr.io/${{ github.repository }}"
-          if [[ "$REPO" = "ag.js" ]]; then
+          if [[ "${REPO}" = "ag.js" ]]; then
             IMAGE="ghcr.io/rentpath/agjs"
           fi
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-          echo "::set-output name=image::${IMAGE}"
+          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
 
           REF="${{ github.head_ref || github.ref }}"
           echo "REF=${REF}" >> $GITHUB_ENV
-          echo "::set-output name=ref::${REF}"
+          echo "ref=${REF}" >> $GITHUB_OUTPUT
 
           SHA=$( git rev-parse HEAD )
           echo "SHA=${SHA}" >> $GITHUB_ENV
-          echo "::set-output name=sha::${SHA}"
+          echo "sha=${SHA}" >> $GITHUB_OUTPUT
 
           SHORT_SHA=$( git rev-parse --short HEAD )
           echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
-          echo "::set-output name=short_sha::${SHORT_SHA}"
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
 
           ALPINE_VERSION="3.15.4"
           if [[ -n "${{ github.event.inputs.alpine_version }}" ]]; then
@@ -105,7 +105,7 @@ jobs:
             ALPINE_VERSION=$( cat .alpine-version )
           fi
           echo "ALPINE_VERSION=${ALPINE_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=alpine_version::${ALPINE_VERSION}"
+          echo "alpine_version=${ALPINE_VERSION}" >> $GITHUB_OUTPUT
 
           DEBIAN_VERSION="buster-slim"
           if [[ -n "${{ github.event.inputs.debian_version }}" ]]; then
@@ -116,7 +116,7 @@ jobs:
             DEBIAN_VERSION=$( cat .debian-version )
           fi
           echo "DEBIAN_VERSION=${DEBIAN_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=debian_version::${DEBIAN_VERSION}"
+          echo "debian_version=${DEBIAN_VERSION}" >> $GITHUB_OUTPUT
 
           NODE_VERSION="16.14.0"
           if [[ -n "${{ github.event.inputs.node_version }}" ]]; then
@@ -125,7 +125,7 @@ jobs:
             NODE_VERSION=$( cat .node-version )
           fi
           echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=node_version::${NODE_VERSION}"
+          echo "node_version=${NODE_VERSION}" >> $GITHUB_OUTPUT
 
           YARN_VERSION="1.22.17"
           if [[ -n "${{ github.event.inputs.yarn_version }}" ]]; then
@@ -134,21 +134,21 @@ jobs:
             YARN_VERSION=$( cat .yarn-version )
           fi
           echo "YARN_VERSION=${YARN_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=yarn_version::${YARN_VERSION}"
+          echo "yarn_version=${YARN_VERSION}" >> $GITHUB_OUTPUT
 
           ALPINE_FULL_VERSION=""
           if [[ -n "${ALPINE_VERSION}" ]]; then
             ALPINE_FULL_VERSION="alpine-${ALPINE_VERSION}_node-v${NODE_VERSION}_yarn-v${YARN_VERSION}"
           fi
           echo "ALPINE_FULL_VERSION=${ALPINE_FULL_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=alpine_full_version::${ALPINE_FULL_VERSION}"
+          echo "alpine_full_version=${ALPINE_FULL_VERSION}" >> $GITHUB_OUTPUT
 
           DEBIAN_FULL_VERSION=""
           if [[ -n "${DEBIAN_VERSION}" ]]; then
             DEBIAN_FULL_VERSION="debian-${DEBIAN_VERSION}_node-v${NODE_VERSION}_yarn-v${YARN_VERSION}"
           fi
           echo "DEBIAN_FULL_VERSION=${DEBIAN_FULL_VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=debian_full_version::${DEBIAN_FULL_VERSION}"
+          echo "debian_full_version=${DEBIAN_FULL_VERSION}" >> $GITHUB_OUTPUT
 
       - name: log variables
         run: |
@@ -232,8 +232,9 @@ jobs:
               ALPINE_RELEASE_EXISTS="true"
             fi
           fi
+          echo "ALPINE_RELEASE_EXISTS=${ALPINE_RELEASE_EXISTS}"
           echo "ALPINE_RELEASE_EXISTS=${ALPINE_RELEASE_EXISTS}" >> $GITHUB_ENV
-          echo "::set-output name=alpine::${ALPINE_RELEASE_EXISTS}"
+          echo "alpine=${ALPINE_RELEASE_EXISTS}" >> $GITHUB_OUTPUT
 
           DEBIAN_RELEASE_EXISTS=""
           if [[ -n "${{ steps.vars.outputs.debian_full_version }}" ]]; then
@@ -245,8 +246,9 @@ jobs:
               DEBIAN_RELEASE_EXISTS="true"
             fi
           fi
+          echo "DEBIAN_RELEASE_EXISTS=${DEBIAN_RELEASE_EXISTS}"
           echo "DEBIAN_RELEASE_EXISTS=${DEBIAN_RELEASE_EXISTS}" >> $GITHUB_ENV
-          echo "::set-output name=debian::${DEBIAN_RELEASE_EXISTS}"
+          echo "debian=${DEBIAN_RELEASE_EXISTS}" >> $GITHUB_OUTPUT
 
       - name: release Alpine image
         if: steps.vars.outputs.alpine_full_version != '' && steps.release_exists.outputs.alpine == ''
