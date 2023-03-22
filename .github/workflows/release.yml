@@ -224,29 +224,26 @@ jobs:
 
           ALPINE_RELEASE_EXISTS=""
           if [[ -n "${{ steps.vars.outputs.alpine_full_version }}" ]]; then
-            git tag --list "${{ steps.vars.outputs.alpine_full_version }}" | grep -q "${{ steps.vars.outputs.alpine_full_version }}"
-            if [[ ! $? ]]; then
+            if git tag --list "${{ steps.vars.outputs.alpine_full_version }}" | grep -q "${{ steps.vars.outputs.alpine_full_version }}" ; then
               git tag -a ${{ steps.vars.outputs.alpine_full_version }} -m "${{ steps.vars.outputs.alpine_full_version }}"
               git push origin refs/tags/${{ steps.vars.outputs.alpine_full_version }}:refs/tags/${{ steps.vars.outputs.alpine_full_version }}
             else
               ALPINE_RELEASE_EXISTS="true"
             fi
           fi
-          echo "ALPINE_RELEASE_EXISTS=${ALPINE_RELEASE_EXISTS}"
           echo "ALPINE_RELEASE_EXISTS=${ALPINE_RELEASE_EXISTS}" >> $GITHUB_ENV
           echo "alpine=${ALPINE_RELEASE_EXISTS}" >> $GITHUB_OUTPUT
 
           DEBIAN_RELEASE_EXISTS=""
           if [[ -n "${{ steps.vars.outputs.debian_full_version }}" ]]; then
-            git tag --list "${{ steps.vars.outputs.debian_full_version }}" | grep -q "${{ steps.vars.outputs.debian_full_version }}"
-            if [[ ! $? ]]; then
+
+            if git tag --list "${{ steps.vars.outputs.debian_full_version }}" | grep -q "${{ steps.vars.outputs.debian_full_version }}" ; then
               git tag -a ${{ steps.vars.outputs.debian_full_version }} -m "${{ steps.vars.outputs.debian_full_version }}"
               git push origin refs/tags/${{ steps.vars.outputs.debian_full_version }}:refs/tags/${{ steps.vars.outputs.debian_full_version }}
             else
               DEBIAN_RELEASE_EXISTS="true"
             fi
           fi
-          echo "DEBIAN_RELEASE_EXISTS=${DEBIAN_RELEASE_EXISTS}"
           echo "DEBIAN_RELEASE_EXISTS=${DEBIAN_RELEASE_EXISTS}" >> $GITHUB_ENV
           echo "debian=${DEBIAN_RELEASE_EXISTS}" >> $GITHUB_OUTPUT
 
